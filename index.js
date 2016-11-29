@@ -41,7 +41,7 @@ http.createServer(function(req, res){
       });
 
       
-    res.writeHead(400, {"Content-Type": "application/json"});
+    res.writeHead(200, {"Content-Type": "application/json"});
     
     var data = JSON.stringify({"success": true});
       return res.end(data);

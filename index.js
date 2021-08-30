@@ -3,14 +3,14 @@ const { spawn } = require("child_process");
 const crypto = require("crypto");
 const { URL } = require("url");
 
-const secret = "amazingkey"; // secret key of the webhook
+const secret = "secret"; // secret key of the webhook
 const port = 8081; // port
 
 http
   .createServer(function (req, res) {
     console.log("request received");
 
-    const path = new URL(req.url).pathname;
+    const path = req.url;
     let data;
 
     if (path != "/push" || req.method != "POST") {

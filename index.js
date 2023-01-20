@@ -5,16 +5,24 @@ var url     = require('url');
 
 var secret  = 'amazingkey'; // secret key of the webhook
 var port    = 8081; // port
+var _path    = '/git';
+
+function resHeadJson(res,code){
+        var value = {"Content-Type": "application/json"};
+        res.writeHead(code, value);
+}
 
 http.createServer(function(req, res){
     
-    console.log("request received");
-    res.writeHead(400, {"Content-Type": "application/json"});
-
+    
+    
     var path = url.parse(req.url).pathname;
+    console.log("request received at: ",path);
+    
 
-    if(path!='/push' || req.method != 'POST'){
+    if(path!=_path || req.method != 'POST'){
        var data = JSON.stringify({"error": "invalid request"});
+       resHeadJson(res,400);
        return res.end(data); 
     }
 
@@ -29,6 +37,7 @@ http.createServer(function(req, res){
       if(hash != req.headers['x-hub-signature']){
           console.log('invalid key');
           var data = JSON.stringify({"error": "invalid key", key: hash});
+          resHeadJson(res,403)
           return res.end(data);
       } 
        
@@ -40,11 +49,10 @@ http.createServer(function(req, res){
           console.log(buff.toString('utf-8'));
       });
 
-      
-    res.writeHead(400, {"Content-Type": "application/json"});
-    
+    resHeadJson(res,202);
     var data = JSON.stringify({"success": true});
-      return res.end(data);
+    
+    return res.end(data);
  
     });
 

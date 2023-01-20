@@ -5,6 +5,7 @@ var url     = require('url');
 
 var secret  = 'amazingkey'; // secret key of the webhook
 var port    = 8081; // port
+var _path    = '/git';
 
 function resHeadJson(res,code){
         var value = {"Content-Type": "application/json"};
@@ -19,7 +20,7 @@ http.createServer(function(req, res){
     console.log("request received at: ",path);
     
 
-    if(path!='/push' || req.method != 'POST'){
+    if(path!=_path || req.method != 'POST'){
        var data = JSON.stringify({"error": "invalid request"});
        resHeadJson(res,400);
        return res.end(data); 
